@@ -1,0 +1,8 @@
+Need this fix:
+
+https://github.com/mitsuhiko/flask-sqlalchemy/pull/89
+
+In order for vanilla sqlalchemy (which is needed by the Celery client)
+to work in combination with the Flask-SQLAchemy Flask extension.
+
+pip install -e git+https://github.com/mitsuhiko/flask-sqlalchemy#egg=Flask-SQLAlchemy
