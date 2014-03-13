@@ -2,8 +2,22 @@ import datetime
 import json
 
 import sqlalchemy as sa
+from sqlalchemy import sql
+from sqlalchemy.ext import compiler
 
 from snapup import db
+
+
+@compiler.compiles(sql.expression.Insert)
+def append_string(insert, compiler, **kwargs):
+    """Append an arbitrary string (e.g. ON DUPLICATE KEY UPDATE) to an insert.
+
+    Taken from http://stackoverflow.com/a/10561643
+    """
+    s = compiler.visit_insert(insert, **kwargs)
+    if 'append_string' in insert.kwargs:
+        return s + ' ' + insert.kwargs['append_string']
+    return s
 
 
 class JsonType(sa.types.TypeDecorator):
@@ -57,6 +71,28 @@ class Metric(db.Model):
         backref=db.backref('metrics', lazy='dynamic'))
     #schedule
     #transform
+
+    def batch_update(self, rows):
+        if not rows:
+            return
+
+        row_list = []
+        for row in rows:
+            row_list.append({
+                'created': row[0],
+                'metric_id': self.id,
+                'int_value': int(row[1])
+            })
+
+        # TODO: Using append_string here raises a SA warming because
+        # it isn't part of the dialect.
+        db.session.execute(
+            MetricData.__table__.insert(
+                append_string='ON DUPLICATE KEY UPDATE int_value=int_value',
+            ),
+            row_list,
+        )
+        db.session.expire_all()
 
 
 class MetricData(db.Model):

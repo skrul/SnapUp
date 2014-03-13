@@ -1,3 +1,4 @@
+from datetime import datetime
 import base64
 
 from snapup import celery
@@ -30,4 +31,7 @@ def ga(metric_id, start_date, end_date):
     rows = ga.realtime_query(
         metrics='rt:activeVisitors')
 
-    print rows
+    metric_rows = [(datetime.now(), rows[0][0])]
+    print metric_rows
+    metric.batch_update(metric_rows)
+    db.session.commit()
