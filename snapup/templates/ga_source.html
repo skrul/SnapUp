@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "forms.html" as forms %}
+{% block title %}Source{% endblock %}
+
+{% block si_content %}
+<h1>Edit Google Analytics Source</h1>
+<form role="form" method="post" action="{{url_for('ga_source', source_id=source_id)}}" enctype="multipart/form-data">
+  {{form.csrf_token}}
+  {{forms.render_field(form.name, with_label=True)}}
+  {{forms.render_field(form.service_account_name, with_label=True)}}
+  {{forms.render_field(form.account_id, with_label=True)}}
+  {{forms.render_field(form.web_property_id, with_label=True)}}
+  {{forms.render_field(form.profile_id, with_label=True)}}
+  {{forms.render_field(form.private_key, with_label=True)}}
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+{% endblock %}

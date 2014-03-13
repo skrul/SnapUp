@@ -3,9 +3,16 @@ from __future__ import absolute_import
 from celery import Celery
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+import flask_bootstrap
+from flask_wtf.csrf import CsrfProtect
+
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+app.secret_key = 'snapguide forever'
+
+flask_bootstrap.Bootstrap(app)
+CsrfProtect(app)
 
 db = SQLAlchemy(app)
 
@@ -29,5 +36,3 @@ celery = make_celery(app)
 
 import snapup.models
 import snapup.views
-
-#from snapup import tasks

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Sources{% endblock %}
+
+{% block si_content %}
+<h1>Sources</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Source Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+{% for source in sources %}
+<tr>
+  <td>{{source.name}}</td>
+  <td><a href="{{url_for('ga_source', source_id=source.id)}}">edit</a></td>
+</tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}
