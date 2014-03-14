@@ -55,6 +55,10 @@ def ga_source(source_id):
             source = db.session.query(models.Source).get(source_id)
         else:
             source = models.Source()
+            q = db.session.query(models.SourceType)
+            q = q.filter(name='google analytics')
+            source_type = q.first()
+            source.source_type = source_type
             db.session.add(source)
 
         params = {

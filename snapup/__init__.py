@@ -36,4 +36,5 @@ celery = make_celery(app)
 
 import snapup.models
 import snapup.views.main
+import snapup.views.database
 import snapup.views.statusboard

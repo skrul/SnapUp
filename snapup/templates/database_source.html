@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "forms.html" as forms %}
+{% block title %}Source{% endblock %}
+
+{% block si_content %}
+<h1>Edit Database Source</h1>
+<form role="form" method="post" action="{{url_for('database_source', source_id=source_id)}}" enctype="multipart/form-data">
+  {{form.csrf_token}}
+  {{forms.render_field(form.name, with_label=True)}}
+  {{forms.render_field(form.url, with_label=True)}}
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+{% endblock %}

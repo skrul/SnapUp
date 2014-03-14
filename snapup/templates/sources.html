@@ -14,7 +14,12 @@
 {% for source in sources %}
 <tr>
   <td>{{source.name}}</td>
-  <td><a href="{{url_for('ga_source', source_id=source.id)}}">edit</a></td>
+  {% if source.source_type.name == 'google analytics' %}
+  {%   set view = 'ga_source' %}
+  {% elif source.source_type.name == 'database' %}
+  {%   set view = 'database_source' %}
+  {% endif %}
+  <td><a href="{{url_for(view, source_id=source.id)}}">edit</a></td>
 </tr>
 {% endfor %}
   </tbody>

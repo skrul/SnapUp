@@ -32,6 +32,5 @@ def ga(metric_id, start_date, end_date):
         metrics='rt:activeVisitors')
 
     metric_rows = [(datetime.now(), rows[0][0])]
-    print metric_rows
     metric.batch_update(metric_rows)
     db.session.commit()

@@ -54,7 +54,40 @@ def statusboard_metric_last_hour(metric_id):
             'refreshEveryNSeconds': 60,
             'type': 'bar',
             'datasequences': [{
-                'title': '',
+                'title': 'Users',
+                'datapoints': datapoints
+            }]
+        }
+    }
+    return flask.jsonify(d)
+
+
+@app.route('/statusboard/metric/<int:metric_id>/daily')
+def statusboard_metric_daily(metric_id):
+    now = datetime.datetime.now()
+    two_weeks_ago = now - datetime.timedelta(days=14)
+
+    metric = db.session.query(models.Metric).get(metric_id)
+
+    q = db.session.query(models.MetricData)
+    q = q.filter_by(metric=metric)
+    q = q.filter(models.MetricData.created > two_weeks_ago)
+    q = q.order_by(models.MetricData.created.asc())
+
+    datapoints = []
+    for row in q.all():
+        datapoints.append({
+            'title': row.created.strftime('%Y-%m-%d'),
+            'value': '{:02}'.format(row.int_value)
+        })
+
+    d = {
+        'graph': {
+            'title': metric.name,
+            'refreshEveryNSeconds': 60,
+            'type': 'bar',
+            'datasequences': [{
+                'title': 'Guides',
                 'datapoints': datapoints
             }]
         }
