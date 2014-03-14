@@ -28,12 +28,14 @@ class GASourceForm(flask_wtf.Form):
 
 
 @app.route('/')
-def hello_world():
-    log = models.Log('hello from flask')
-    db.session.add(log)
-    db.session.commit()
-    tasks.sql.delay()
+def index():
     return flask.render_template('index.html')
+
+
+@app.route('/update-schedule')
+def update_schedule():
+    tasks.update_schedule.delay()
+    return flask.redirect(flask.url_for('index'))
 
 
 @app.route('/sources')

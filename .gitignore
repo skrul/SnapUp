@@ -1,3 +1,5 @@
 # Compiled python bits.
 *.py[co]
 
+# Celery beat database
+celerybeat-schedule

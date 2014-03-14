@@ -69,7 +69,12 @@ class Metric(db.Model):
     source = db.relationship(
         'Source',
         backref=db.backref('metrics', lazy='dynamic'))
-    #schedule
+    last_run = db.Column(db.DateTime)
+    cron_minute = db.Column(db.String(64))
+    cron_hour = db.Column(db.String(64))
+    cron_dow = db.Column(db.String(64))
+    cron_dom = db.Column(db.String(64))
+    cron_moy = db.Column(db.String(64))
     #transform
 
     def batch_update(self, rows):
