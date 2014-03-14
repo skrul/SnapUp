@@ -83,20 +83,35 @@ class Metric(db.Model):
 
         row_list = []
         for row in rows:
+            row_list = []
             row_list.append({
                 'created': row[0],
                 'metric_id': self.id,
                 'int_value': int(row[1])
             })
 
+            db.session.execute(
+                MetricData.__table__.insert(
+                    append_string='ON DUPLICATE KEY UPDATE int_value=' + str(row[1]),
+                ),
+                row_list,
+            )
+
+        print row_list
+
         # TODO: Using append_string here raises a SA warming because
         # it isn't part of the dialect.
-        db.session.execute(
-            MetricData.__table__.insert(
-                append_string='ON DUPLICATE KEY UPDATE int_value=int_value',
-            ),
-            row_list,
-        )
+        # t = sa.text('insert into metric_data (created, metric_id, int_value) values (:created, :metric_id, :int_value) on duplicate key update int_value=:int_value')
+        # db.session.execute(t, row_list)
+                    
+
+
+        # db.session.execute(
+        #     MetricData.__table__.insert(
+        #         append_string='ON DUPLICATE KEY UPDATE int_value=int_value',
+        #     ),
+        #     row_list,
+        # )
         db.session.expire_all()
 
 

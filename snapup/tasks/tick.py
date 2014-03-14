@@ -35,6 +35,6 @@ def tick():
             else:
                 raise Exception('bad source type')
 
-            fn.delay(metric.id, datetime.datetime.now(), None)
-            metric.last_run = datetime.datetime.now()
+            fn.delay(metric.id, datetime.datetime.utcnow(), None)
+            metric.last_run = datetime.datetime.utcnow()
     db.session.commit()
