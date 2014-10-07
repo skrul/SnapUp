@@ -78,7 +78,7 @@ def statusboard_metric_daily(metric_id):
     for row in q.all():
         datapoints.append({
             'title': row.created.strftime('%Y-%m-%d'),
-            'value': '{:02}'.format(row.int_value)
+            'value': row.int_value
         })
 
     d = {
